@@ -67,6 +67,17 @@ func processInfo(pid int, period time.Duration) {
 	if v, err := p.NumThreads(); err == nil {
 		fmt.Printf("threads:\t%v\n", v)
 	}
+	if v, err := p.MemoryInfo(); err == nil {
+		var s string
+		if v.RSS < 1024 {
+			s = fmt.Sprintf("%dB", v.RSS)
+		} else if 1024 < v.RSS && v.RSS < 1024*1024 {
+			s = fmt.Sprintf("%dK", v.RSS/1024)
+		} else {
+			s = fmt.Sprintf("%dM", v.RSS/(1024*1024))
+		}
+		fmt.Printf("memory rss:\t%s\n", s)
+	}
 	if v, err := p.MemoryPercent(); err == nil {
 		fmt.Printf("memory usage:\t%.3f%%\n", v)
 	}
